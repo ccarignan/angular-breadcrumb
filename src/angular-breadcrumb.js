@@ -43,7 +43,7 @@ function $Breadcrumb() {
         angular.extend($$options, options);
     };
 
-    this.$get = ['$state', '$stateParams', '$rootScope', '$injector', '$q', function ($state, $stateParams, $rootScope, $injector, $q) {
+    this.$get = ['$state', '$stateParams', '$rootScope', '$injector', '$q', '$log', function ($state, $stateParams, $rootScope, $injector, $q, $log) {
         // Get the parent state
         var $$parentState = function (state) {
             // Check if state has explicit parent OR we try guess parent from its name
@@ -127,6 +127,11 @@ function $Breadcrumb() {
                 }
             } else if (state.views['@']) {
                 return state.locals['@'];
+            }
+
+            if (state.locals.globals) {
+                $log.debug('mainView was not defined, local $scope will not be available.');
+                return state.locals.globals;
             }
 
             throw new Error('Multiple views found and mainView was not defined');
